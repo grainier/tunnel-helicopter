@@ -27,7 +27,7 @@ var game = {
     me.input.bindKey(me.input.KEY.SPACE, "fly", true);
     me.input.bindTouch(me.input.KEY.SPACE);
 
-    me.pool.register("clumsy", BirdEntity);
+    me.pool.register("clumsy", HelicopterEntity);
     me.pool.register("pipe", PipeEntity, true);
     me.pool.register("hit", HitEntity, true);
 
