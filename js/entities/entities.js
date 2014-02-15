@@ -28,15 +28,30 @@ var HelicopterEntity = me.ObjectEntity.extend({
     update: function (dt) {
         // mechanics
         if (game.data.start) {
+
+            if(me.input.keyStatus('fly')) {
+                this.gravityForce = 0.01;
+                this.flyTween.stop();
+                this.pos.y -= me.timer.tick * this.gravityForce * 250;
+                this.flyTween.start();
+                this.renderable.angle = -this.maxAngleRotation;
+            } else {
+                // console.info("KEY NOT PRESSED");
+                this.gravityForce += 0.2;
+                this.pos.y += me.timer.tick * this.gravityForce;
+                this.renderable.angle += Number.prototype.degToRad(3) * me.timer.tick;
+                if (this.renderable.angle > this.maxAngleRotationDown)
+                    this.renderable.angle = this.maxAngleRotationDown;
+            }
+
+            /* original
             if (me.input.isKeyPressed('fly')) {
                 this.gravityForce = 0.01;
-
                 var currentPos = this.pos.y;
                 // stop the previous one
-                this.flyTween.stop()
+                this.flyTween.stop();
                 this.flyTween.to({y: currentPos - 72}, 100);
                 this.flyTween.start();
-
                 this.renderable.angle = -this.maxAngleRotation;
             } else {
                 this.gravityForce += 0.2;
@@ -45,6 +60,7 @@ var HelicopterEntity = me.ObjectEntity.extend({
                 if (this.renderable.angle > this.maxAngleRotationDown)
                     this.renderable.angle = this.maxAngleRotationDown;
             }
+            */
         }
 
         var res = me.game.collide(this);
@@ -69,11 +85,8 @@ var HelicopterEntity = me.ObjectEntity.extend({
                 return false;
             }
         }
-
         return this.parent(dt);
-
     }
-
 });
 
 
@@ -122,8 +135,8 @@ var PipeGenerator = me.Renderable.extend({
         this.lastPipePosY = 0;  // upper pipe
         this.isInitial = true;
         this.posYmin = 220;
-        this.posYmax = 480;
-        this.deltaY = 100;
+        this.posYmax = 500;
+        this.deltaY = 110;
     },
 
     update: function (dt) {
